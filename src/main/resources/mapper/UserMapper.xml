@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.gq.bbpic.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="edu.gq.bbpic.pojo.User" >
+    <constructor >
+      <idArg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="account" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="enable" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="creation_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    user_id, account, password, email, name, avatar, role, enable, creation_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="edu.gq.bbpic.pojo.User" >
+    insert into user (user_id, account, password, 
+      email, name, avatar, 
+      role, enable, creation_time
+      )
+    values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      #{role,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.User" >
+    update user
+    set account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      role = #{role,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <!--  登陆-->
+  <select id="checkLogin" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"/>
+    from user
+    where account = #{account}
+    and password = #{password}
+  </select>
+
+  <!--  根据账号查询用户-->
+  <select id="selectByAccount" resultType="int" parameterType="string">
+    select
+    count(1)
+    from user
+    where account = #{account}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from user
+  </select>
+</mapper>

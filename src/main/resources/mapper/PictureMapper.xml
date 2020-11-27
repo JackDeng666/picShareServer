@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.gq.bbpic.dao.PictureMapper" >
+  <resultMap id="BaseResultMap" type="edu.gq.bbpic.pojo.Picture" >
+    <constructor >
+      <idArg column="picture_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="pic_list_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="thumbnail_url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="od_url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="praise_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="collect_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="enable" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="creation_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    picture_id, pic_list_id, category_id, user_id, thumbnail_url, od_url, praise_num, 
+    collect_num, enable, creation_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="edu.gq.bbpic.pojo.Picture" >
+    insert into picture (picture_id, pic_list_id, category_id, 
+      user_id, thumbnail_url, od_url, 
+      praise_num, collect_num, enable, 
+      creation_time)
+    values (#{pictureId,jdbcType=INTEGER}, #{picListId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, #{odUrl,jdbcType=VARCHAR}, 
+      #{praiseNum,jdbcType=INTEGER}, #{collectNum,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, 
+      #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.gq.bbpic.pojo.Picture" >
+    insert into picture
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pictureId != null" >
+        picture_id,
+      </if>
+      <if test="picListId != null" >
+        pic_list_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url,
+      </if>
+      <if test="odUrl != null" >
+        od_url,
+      </if>
+      <if test="praiseNum != null" >
+        praise_num,
+      </if>
+      <if test="collectNum != null" >
+        collect_num,
+      </if>
+      <if test="enable != null" >
+        enable,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pictureId != null" >
+        #{pictureId,jdbcType=INTEGER},
+      </if>
+      <if test="picListId != null" >
+        #{picListId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="odUrl != null" >
+        #{odUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="praiseNum != null" >
+        #{praiseNum,jdbcType=INTEGER},
+      </if>
+      <if test="collectNum != null" >
+        #{collectNum,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.gq.bbpic.pojo.Picture" >
+    update picture
+    <set >
+      <if test="picListId != null" >
+        pic_list_id = #{picListId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="odUrl != null" >
+        od_url = #{odUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="praiseNum != null" >
+        praise_num = #{praiseNum,jdbcType=INTEGER},
+      </if>
+      <if test="collectNum != null" >
+        collect_num = #{collectNum,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.Picture" >
+    update picture
+    set pic_list_id = #{picListId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      od_url = #{odUrl,jdbcType=VARCHAR},
+      praise_num = #{praiseNum,jdbcType=INTEGER},
+      collect_num = #{collectNum,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=INTEGER},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+</mapper>

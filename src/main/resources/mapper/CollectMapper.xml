@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.gq.bbpic.dao.CollectMapper" >
+  <resultMap id="BaseResultMap" type="edu.gq.bbpic.pojo.Collect" >
+    <constructor >
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="oject_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="object_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="is_cancel" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="creation_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <insert id="insert" parameterType="edu.gq.bbpic.pojo.Collect" >
+    insert into collect (user_id, oject_id, object_type, 
+      is_cancel, creation_time)
+    values (#{userId,jdbcType=INTEGER}, #{ojectId,jdbcType=INTEGER}, #{objectType,jdbcType=INTEGER}, 
+      #{isCancel,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.gq.bbpic.pojo.Collect" >
+    insert into collect
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="ojectId != null" >
+        oject_id,
+      </if>
+      <if test="objectType != null" >
+        object_type,
+      </if>
+      <if test="isCancel != null" >
+        is_cancel,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="ojectId != null" >
+        #{ojectId,jdbcType=INTEGER},
+      </if>
+      <if test="objectType != null" >
+        #{objectType,jdbcType=INTEGER},
+      </if>
+      <if test="isCancel != null" >
+        #{isCancel,jdbcType=INTEGER},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>
