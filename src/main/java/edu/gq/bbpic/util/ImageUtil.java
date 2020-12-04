@@ -1,14 +1,71 @@
 package edu.gq.bbpic.util;
 
+import edu.gq.bbpic.common.Const;
+import edu.gq.bbpic.common.ServerResponse;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ImageUtil {
-    public static void generateThumbnail(File file, String toFilePath) throws IOException {
 
+    @Value("${fileUploadPath}")
+    static String fileUploadPath;
+    @Value("${fileBasicUrl}")
+    static String fileBasicUrl;
+    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
+
+    public static ServerResponse saveImage(MultipartFile file){
+        String today = sdf.format(new Date());
+
+        String oPath = fileUploadPath + today + "original";
+        String tPath = fileUploadPath + today + "thumbnail";
+        String[] array1 = oPath.split("/");
+        String[] array2 = tPath.split("/");
+        oPath = "";
+        tPath = "";
+        for (int i = 0; i < array1.length; i++) {
+            oPath += array1[i] + File.separator;
+            tPath += array2[i] + File.separator;
+        }
+        // 原图文件夹
+        File folderOp = new File(oPath);
+        // 缩略图文件夹
+        File folderTp = new File(tPath);
+        if (!folderOp.isDirectory()) {
+            folderOp.mkdirs();
+        }
+        if (!folderTp.isDirectory()) {
+            folderTp.mkdirs();
+        }
+
+        Map map = new HashMap();
+
+        String oldName = file.getOriginalFilename();
+        String newName = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+        String originalName = newName + oldName.substring(oldName.lastIndexOf("."));
+        String thumbnailName = newName + ".jpg";
+        try {
+            // 存储原图
+            File originalFile = new File(folderOp, originalName);
+            file.transferTo(originalFile);
+            // 存储缩略图
+            generateThumbnail(originalFile, tPath + thumbnailName);
+
+            map.put("oUrl", fileBasicUrl + today + "original/" + originalName);
+            map.put("tUrl", fileBasicUrl + today + "thumbnail/" + thumbnailName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ServerResponse(Const.ResCode.FAIL, "上传失败");
+        }
+
+        return new ServerResponse(Const.ResCode.SUCCEES, "上传成功", map);
+    }
+
+    public static void generateThumbnail(File file, String toFilePath) throws IOException {
         /**
          * 指定大小进行缩放
          * 若图片横比200小，高比300小，不变

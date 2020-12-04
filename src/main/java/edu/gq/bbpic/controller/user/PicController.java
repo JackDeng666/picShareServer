@@ -16,24 +16,43 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("picture")
+@RequestMapping("pic")
 public class PicController {
     @Autowired
     private PicService picService;
 
-    @PostMapping("addPic")
-    public ServerResponse addPic(HttpServletRequest request) {
+    @GetMapping("picList")
+    public ServerResponse getPicList(@RequestParam(defaultValue = "1") int currentPage,
+                                    @RequestParam(defaultValue = "10") int pageSize,
+                                    @RequestParam(defaultValue = "hot") String type,
+                                    @RequestParam(defaultValue = "1") int enable) {
+
+        return picService.getPicList(currentPage, pageSize, type, enable);
+    }
+
+    @GetMapping("picSetList")
+    public ServerResponse getPicSetList(@RequestParam(defaultValue = "1") int currentPage,
+                                        @RequestParam(defaultValue = "10") int pageSize,
+                                        @RequestParam(defaultValue = "hot") String type,
+                                        @RequestParam(defaultValue = "1") int enable) {
+
+        return picService.getPicSetList(currentPage, pageSize, type, enable);
+    }
+
+    @PostMapping("uploadSinglePic")
+    public ServerResponse uploadSinglePic(HttpServletRequest request) {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         MultipartFile file = ((MultipartHttpServletRequest) request).getFile("file");
 
-        System.out.println(JSON.toJSON(params.getParameterMap()));
-
-        return picService.addPic(file);
+        return picService.uploadSinglePic(file, params.getParameterMap());
     }
 
-    @GetMapping("category")
-    public ServerResponse getCategory() {
-        return picService.getCategory();
+    @PostMapping("uploadPicToList")
+    public ServerResponse uploadPicToList(HttpServletRequest request) {
+        MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
+        MultipartFile file = ((MultipartHttpServletRequest) request).getFile("file");
+
+        return picService.uploadPicToList(file, params.getParameterMap());
     }
 
     @GetMapping()

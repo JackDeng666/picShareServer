@@ -13,11 +13,12 @@
       <arg column="collect_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="enable" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="creation_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="heat" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
     picture_id, pic_list_id, category_id, user_id, thumbnail_url, od_url, praise_num, 
-    collect_num, enable, creation_time
+    collect_num, enable, creation_time, heat
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -25,87 +26,35 @@
     from picture
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </select>
+  <select id="selectNew" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from picture where enable = #{enable}
+    order by creation_time desc
+    limit #{currentPage},#{pageSize}
+  </select>
+  <select id="selectHot" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from picture where enable = #{enable}
+    order by heat desc
+    limit #{currentPage},#{pageSize}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from picture
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="edu.gq.bbpic.pojo.Picture" >
-    insert into picture (picture_id, pic_list_id, category_id, 
+    insert into picture (pic_list_id, category_id,
       user_id, thumbnail_url, od_url, 
       praise_num, collect_num, enable, 
-      creation_time)
-    values (#{pictureId,jdbcType=INTEGER}, #{picListId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
+      creation_time, heat)
+    values (#{picListId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER},
       #{userId,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, #{odUrl,jdbcType=VARCHAR}, 
       #{praiseNum,jdbcType=INTEGER}, #{collectNum,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, 
-      #{creationTime,jdbcType=TIMESTAMP})
+      now(), #{heat,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="edu.gq.bbpic.pojo.Picture" >
-    insert into picture
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="pictureId != null" >
-        picture_id,
-      </if>
-      <if test="picListId != null" >
-        pic_list_id,
-      </if>
-      <if test="categoryId != null" >
-        category_id,
-      </if>
-      <if test="userId != null" >
-        user_id,
-      </if>
-      <if test="thumbnailUrl != null" >
-        thumbnail_url,
-      </if>
-      <if test="odUrl != null" >
-        od_url,
-      </if>
-      <if test="praiseNum != null" >
-        praise_num,
-      </if>
-      <if test="collectNum != null" >
-        collect_num,
-      </if>
-      <if test="enable != null" >
-        enable,
-      </if>
-      <if test="creationTime != null" >
-        creation_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="pictureId != null" >
-        #{pictureId,jdbcType=INTEGER},
-      </if>
-      <if test="picListId != null" >
-        #{picListId,jdbcType=INTEGER},
-      </if>
-      <if test="categoryId != null" >
-        #{categoryId,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="thumbnailUrl != null" >
-        #{thumbnailUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="odUrl != null" >
-        #{odUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="praiseNum != null" >
-        #{praiseNum,jdbcType=INTEGER},
-      </if>
-      <if test="collectNum != null" >
-        #{collectNum,jdbcType=INTEGER},
-      </if>
-      <if test="enable != null" >
-        #{enable,jdbcType=INTEGER},
-      </if>
-      <if test="creationTime != null" >
-        #{creationTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="edu.gq.bbpic.pojo.Picture" >
     update picture
     <set >
@@ -136,6 +85,9 @@
       <if test="creationTime != null" >
         creation_time = #{creationTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="heat != null" >
+        heat = #{heat,jdbcType=INTEGER},
+      </if>
     </set>
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </update>
@@ -149,7 +101,8 @@
       praise_num = #{praiseNum,jdbcType=INTEGER},
       collect_num = #{collectNum,jdbcType=INTEGER},
       enable = #{enable,jdbcType=INTEGER},
-      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      heat = #{heat,jdbcType=INTEGER}
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </update>
 </mapper>

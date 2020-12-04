@@ -19,53 +19,22 @@
     where category_id = #{categoryId,jdbcType=INTEGER}
   </select>
 
-    <select id="selectAll" resultType="java.util.List" resultMap="BaseResultMap">
-      select
-      <include refid="Base_Column_List" />
-      from category
-    </select>
+  <select id="selectAll" resultType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from category
+  </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from category
     where category_id = #{categoryId,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="edu.gq.bbpic.pojo.Category" >
-    insert into category (category_id, category_name, sign_url, 
-      creation_time)
-    values (#{categoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{signUrl,jdbcType=VARCHAR}, 
-      #{creationTime,jdbcType=TIMESTAMP})
+    insert into category (category_name, sign_url, creation_time)
+    values (#{categoryName,jdbcType=VARCHAR}, #{signUrl,jdbcType=VARCHAR}, now())
   </insert>
-  <insert id="insertSelective" parameterType="edu.gq.bbpic.pojo.Category" >
-    insert into category
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="categoryId != null" >
-        category_id,
-      </if>
-      <if test="categoryName != null" >
-        category_name,
-      </if>
-      <if test="signUrl != null" >
-        sign_url,
-      </if>
-      <if test="creationTime != null" >
-        creation_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="categoryId != null" >
-        #{categoryId,jdbcType=INTEGER},
-      </if>
-      <if test="categoryName != null" >
-        #{categoryName,jdbcType=VARCHAR},
-      </if>
-      <if test="signUrl != null" >
-        #{signUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="creationTime != null" >
-        #{creationTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="edu.gq.bbpic.pojo.Category" >
     update category
     <set >
@@ -81,6 +50,7 @@
     </set>
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.Category" >
     update category
     set category_name = #{categoryName,jdbcType=VARCHAR},

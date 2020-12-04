@@ -15,17 +15,20 @@ public class PicList {
 
     private Integer collectNum;
 
+    private Integer heat;
+
     private Integer enable;
 
     private Date creationTime;
 
-    public PicList(Integer picListId, Integer userId, Integer categoryId, String picListName, String intro, Integer collectNum, Integer enable, Date creationTime) {
+    public PicList(Integer picListId, Integer userId, Integer categoryId, String picListName, String intro, Integer collectNum, Integer heat, Integer enable, Date creationTime) {
         this.picListId = picListId;
         this.userId = userId;
         this.categoryId = categoryId;
         this.picListName = picListName;
         this.intro = intro;
         this.collectNum = collectNum;
+        this.heat = heat;
         this.enable = enable;
         this.creationTime = creationTime;
     }
@@ -80,6 +83,14 @@ public class PicList {
 
     public void setCollectNum(Integer collectNum) {
         this.collectNum = collectNum;
+    }
+
+    public Integer getHeat() {
+        return heat;
+    }
+
+    public void setHeat(Integer heat) {
+        this.heat = heat;
     }
 
     public Integer getEnable() {

@@ -23,7 +23,9 @@ public class Picture {
 
     private Date creationTime;
 
-    public Picture(Integer pictureId, Integer picListId, Integer categoryId, Integer userId, String thumbnailUrl, String odUrl, Integer praiseNum, Integer collectNum, Integer enable, Date creationTime) {
+    private Integer heat;
+
+    public Picture(Integer pictureId, Integer picListId, Integer categoryId, Integer userId, String thumbnailUrl, String odUrl, Integer praiseNum, Integer collectNum, Integer enable, Date creationTime, Integer heat) {
         this.pictureId = pictureId;
         this.picListId = picListId;
         this.categoryId = categoryId;
@@ -34,6 +36,7 @@ public class Picture {
         this.collectNum = collectNum;
         this.enable = enable;
         this.creationTime = creationTime;
+        this.heat = heat;
     }
 
     public Picture() {
@@ -118,5 +121,13 @@ public class Picture {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public Integer getHeat() {
+        return heat;
+    }
+
+    public void setHeat(Integer heat) {
+        this.heat = heat;
     }
 }
