@@ -28,10 +28,17 @@
     </association>
 
     <collection
-            property="pictures"
-            column="pic_list_id"
-            ofType="edu.gq.bbpic.pojo.Picture"
-            select="edu.gq.bbpic.dao.PictureMapper.selectByPicListId">
+      property="tags"
+      column="{objectId=object_id,objectType=object_type}"
+      ofType="edu.gq.bbpic.vo.TagVo"
+      select="edu.gq.bbpic.dao.TagMapper.select">
+    </collection>
+
+    <collection
+      property="pictures"
+      column="pic_list_id"
+      ofType="edu.gq.bbpic.pojo.Picture"
+      select="edu.gq.bbpic.dao.PictureMapper.selectByPicListId">
     </collection>
   </resultMap>
   <sql id="Base_Column_List" >
@@ -57,9 +64,11 @@
   <select id="selectHot" resultMap="PicListVoMap" parameterType="map" >
     select
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar
-    from pic_list pl, `user` u
+    u.user_id, u.name, u.avatar, t.object_id, t.object_type
+    from pic_list pl, `user` u, tag t
     where pl.user_id = u.user_id
+    and pl.pic_list_id = t.object_id
+    and t.object_type = 1
     and pl.enable = #{enable}
     order by pl.heat desc
     limit #{left}, #{right}
@@ -67,19 +76,25 @@
   <select id="selectHotByCategory" resultMap="PicListVoMap" parameterType="map" >
     select
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar
-    from pic_list pl, `user` u, tag t, category c
+    u.user_id, u.name, u.avatar, t.object_id, t.object_type
+    from pic_list pl, `user` u, tag t
     where pl.user_id = u.user_id
+    and pl.pic_list_id = t.object_id
+    and t.object_type = 1
     and pl.enable = #{enable}
+    and t.category_id = #{categoryId}
+    and t.object_id = pl.pic_list_id
     order by pl.heat desc
     limit #{left}, #{right}
   </select>
   <select id="selectNew" resultMap="PicListVoMap" parameterType="map" >
     select
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar
-    from pic_list pl, `user` u
+    u.user_id, u.name, u.avatar, t.object_id, t.object_type
+    from pic_list pl, `user` u, tag t
     where pl.user_id = u.user_id
+    and pl.pic_list_id = t.object_id
+    and t.object_type = 1
     and pl.enable = #{enable}
     order by pl.creation_time desc
     limit #{left}, #{right}
@@ -87,10 +102,14 @@
   <select id="selectNewByCategory" resultMap="PicListVoMap" parameterType="map" >
     select
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar
-    from pic_list pl, `user` u
+    u.user_id, u.name, u.avatar, t.object_id, t.object_type
+    from pic_list pl, `user` u, tag t
     where pl.user_id = u.user_id
+    and pl.pic_list_id = t.object_id
+    and t.object_type = 1
     and pl.enable = #{enable}
+    and t.category_id = #{categoryId}
+    and t.object_id = pl.pic_list_id
     order by pl.creation_time desc
     limit #{left}, #{right}
   </select>

@@ -185,14 +185,22 @@ public class PicServiceImpl implements PicService {
     }
 
     @Override
-    public ServerResponse getPicSetList(int currentPage, int pageSize, String type, int enable) {
+    public ServerResponse getPicSetList(int currentPage, int pageSize, String type, int enable, int categoryId) {
         try{
             List picSetList = null;
             if("new".equals(type)){
-                picSetList = picListMapper.selectNew(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                if(categoryId == 0){
+                    picSetList = picListMapper.selectNew(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                } else {
+                    picSetList = picListMapper.selectNewByCategory(currentPage*pageSize-pageSize, currentPage*pageSize, enable, categoryId);
+                }
             }
             if("hot".equals(type)){
-                picSetList = picListMapper.selectHot(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                if(categoryId == 0){
+                    picSetList = picListMapper.selectHot(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                } else {
+                    picSetList = picListMapper.selectHotByCategory(currentPage*pageSize-pageSize, currentPage*pageSize, enable, categoryId);
+                }
             }
             return new ServerResponse(Const.ResCode.SUCCEES, "ok", picSetList);
         } catch (Exception e) {

@@ -36,7 +36,7 @@
     select
     <include refid="Base_Column_List" />
     from picture p, tag t
-    where enable = #{enable}
+    where p.enable = #{enable}
     and t.category_id = #{categoryId}
     and t.object_type = 0
     and t.object_id = p.picture_id
@@ -54,7 +54,7 @@
     select
     <include refid="Base_Column_List" />
     from picture p, tag t
-    where enable = #{enable}
+    where p.enable = #{enable}
     and t.category_id = #{categoryId}
     and t.object_type = 0
     and t.object_id = p.picture_id

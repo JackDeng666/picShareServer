@@ -21,14 +21,22 @@ public class PicListVo {
 
     private Date creationTime;
 
-    private Category category;
-
     private User user;
+
+    private List<TagVo> tags;
 
     private List<Picture> pictures;
 
     public PicListVo(){
 
+    }
+
+    public List<TagVo> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagVo> tags) {
+        this.tags = tags;
     }
 
     public Integer getPicListId() {
@@ -77,14 +85,6 @@ public class PicListVo {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public User getUser() {

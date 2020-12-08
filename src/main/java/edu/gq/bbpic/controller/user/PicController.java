@@ -27,7 +27,7 @@ public class PicController {
                                     @RequestParam(defaultValue = "10") int pageSize,
                                     @RequestParam(defaultValue = "hot") String type,
                                     @RequestParam(defaultValue = "1") int enable,
-                                     @RequestParam(defaultValue = "0") int categoryId) {
+                                    @RequestParam(defaultValue = "0") int categoryId) {
 
         return picService.getPicList(currentPage, pageSize, type, enable, categoryId);
     }
@@ -36,9 +36,10 @@ public class PicController {
     public ServerResponse getPicSetList(@RequestParam(defaultValue = "1") int currentPage,
                                         @RequestParam(defaultValue = "10") int pageSize,
                                         @RequestParam(defaultValue = "hot") String type,
-                                        @RequestParam(defaultValue = "1") int enable) {
+                                        @RequestParam(defaultValue = "1") int enable,
+                                        @RequestParam(defaultValue = "0") int categoryId) {
 
-        return picService.getPicSetList(currentPage, pageSize, type, enable);
+        return picService.getPicSetList(currentPage, pageSize, type, enable, categoryId);
     }
 
     @PostMapping("addPicList")

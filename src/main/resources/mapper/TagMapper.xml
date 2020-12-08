@@ -8,6 +8,22 @@
       <arg column="object_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
+  <resultMap id="TagVoMap" type="edu.gq.bbpic.vo.TagVo" >
+    <result property="tagId" column="tag_id"/>
+
+    <association property="category" javaType="edu.gq.bbpic.pojo.Category">
+      <result property="categoryId" column="category_id"/>
+      <result property="categoryName" column="category_name"/>
+      <result property="signUrl" column="sign_url"/>
+    </association>
+  </resultMap>
+  <select id="select" resultMap="TagVoMap" parameterType="map">
+    select t.tag_id, c.category_id, c.category_name, c.sign_url
+    from tag t, category c
+    where t.category_id = c.category_id
+    and t.object_id = #{objectId}
+    and t.object_type = #{objectType}
+  </select>
   <insert id="insert" parameterType="edu.gq.bbpic.pojo.Tag">
     insert into tag (category_id, object_id, object_type)
     values (#{categoryId,jdbcType=INTEGER}, #{objectId,jdbcType=INTEGER}, #{objectType,jdbcType=INTEGER})

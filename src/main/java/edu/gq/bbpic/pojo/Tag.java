@@ -1,13 +1,16 @@
 package edu.gq.bbpic.pojo;
 
 public class Tag {
+    private Integer tagId;
+
     private Integer categoryId;
 
     private Integer objectId;
 
     private Integer objectType;
 
-    public Tag(Integer categoryId, Integer objectId, Integer objectType) {
+    public Tag(Integer tagId, Integer categoryId, Integer objectId, Integer objectType) {
+        this.tagId = tagId;
         this.categoryId = categoryId;
         this.objectId = objectId;
         this.objectType = objectType;
@@ -15,6 +18,14 @@ public class Tag {
 
     public Tag() {
         super();
+    }
+
+    public Integer getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(Integer tagId) {
+        this.tagId = tagId;
     }
 
     public Integer getCategoryId() {

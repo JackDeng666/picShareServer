@@ -12,5 +12,5 @@ public interface PicService {
 
     ServerResponse getPicList(int currentPage, int pageSize, String type, int enable, int categoryId);
 
-    ServerResponse getPicSetList(int currentPage, int pageSize, String type, int enable);
+    ServerResponse getPicSetList(int currentPage, int pageSize, String type, int enable, int categoryId);
 }
