@@ -5,7 +5,6 @@
     <constructor >
       <idArg column="pic_list_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="pic_list_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="intro" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="collect_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -22,12 +21,6 @@
     <result property="heat" column="heat"/>
     <result property="creationTime" column="pl_time"/>
 
-    <association property="category" javaType="edu.gq.bbpic.pojo.Category">
-      <result property="categoryId" column="category_id"/>
-      <result property="categoryName" column="category_name"/>
-      <result property="signUrl" column="sign_url"/>
-    </association>
-
     <association property="user" javaType="edu.gq.bbpic.pojo.User">
       <result property="userId" column="user_id"/>
       <result property="name" column="name"/>
@@ -36,18 +29,17 @@
 
     <collection
             property="pictures"
-            column="picture_id"
+            column="pic_list_id"
             ofType="edu.gq.bbpic.pojo.Picture"
-            select="edu.gq.bbpic.dao.PictureMapper.selectByPrimaryKey">
+            select="edu.gq.bbpic.dao.PictureMapper.selectByPicListId">
     </collection>
   </resultMap>
   <sql id="Base_Column_List" >
-    pic_list_id, user_id, category_id, pic_list_name, intro, collect_num, heat, enable, 
+    pic_list_id, user_id, pic_list_name, intro, collect_num, heat, enable,
     creation_time
   </sql>
   <sql id="Vo_Column" >
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    c.category_id, c.category_name, c.sign_url,
     u.user_id, u.name, u.avatar
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -65,37 +57,52 @@
   <select id="selectHot" resultMap="PicListVoMap" parameterType="map" >
     select
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    c.category_id, c.category_name, c.sign_url,
     u.user_id, u.name, u.avatar
-    from pic_list pl, category c, `user` u
-    where pl.category_id = c.category_id
-    and pl.user_id = u.user_id
+    from pic_list pl, `user` u
+    where pl.user_id = u.user_id
     and pl.enable = #{enable}
     order by pl.heat desc
-    limit #{currentPage}, #{pageSize}
+    limit #{left}, #{right}
+  </select>
+  <select id="selectHotByCategory" resultMap="PicListVoMap" parameterType="map" >
+    select
+    pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
+    u.user_id, u.name, u.avatar
+    from pic_list pl, `user` u, tag t, category c
+    where pl.user_id = u.user_id
+    and pl.enable = #{enable}
+    order by pl.heat desc
+    limit #{left}, #{right}
   </select>
   <select id="selectNew" resultMap="PicListVoMap" parameterType="map" >
     select
     pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    c.category_id, c.category_name, c.sign_url,
     u.user_id, u.name, u.avatar
-    from pic_list pl, category c, `user` u
-    where pl.category_id = c.category_id
-    and pl.user_id = u.user_id
+    from pic_list pl, `user` u
+    where pl.user_id = u.user_id
     and pl.enable = #{enable}
     order by pl.creation_time desc
-    limit #{currentPage}, #{pageSize}
+    limit #{left}, #{right}
+  </select>
+  <select id="selectNewByCategory" resultMap="PicListVoMap" parameterType="map" >
+    select
+    pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
+    u.user_id, u.name, u.avatar
+    from pic_list pl, `user` u
+    where pl.user_id = u.user_id
+    and pl.enable = #{enable}
+    order by pl.creation_time desc
+    limit #{left}, #{right}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from pic_list
     where pic_list_id = #{picListId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="edu.gq.bbpic.pojo.PicList" >
-    insert into pic_list (user_id, category_id,
+  <insert id="insert" parameterType="edu.gq.bbpic.pojo.PicList" useGeneratedKeys="true" keyProperty="picListId">
+    insert into pic_list (user_id,
       pic_list_name, intro, collect_num, 
-      heat, enable, creation_time
-      )
-    values (#{userId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER},
+      heat, enable, creation_time)
+    values (#{userId,jdbcType=INTEGER},
       #{picListName,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, #{collectNum,jdbcType=INTEGER}, 
       #{heat,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, now()
       )
@@ -105,9 +112,6 @@
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="categoryId != null" >
-        category_id = #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="picListName != null" >
         pic_list_name = #{picListName,jdbcType=VARCHAR},

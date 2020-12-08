@@ -3,6 +3,7 @@ package edu.gq.bbpic.controller.user;
 import com.alibaba.fastjson.JSON;
 import edu.gq.bbpic.common.Const;
 import edu.gq.bbpic.common.ServerResponse;
+import edu.gq.bbpic.pojo.PicList;
 import edu.gq.bbpic.service.PicService;
 import edu.gq.bbpic.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -25,9 +26,10 @@ public class PicController {
     public ServerResponse getPicList(@RequestParam(defaultValue = "1") int currentPage,
                                     @RequestParam(defaultValue = "10") int pageSize,
                                     @RequestParam(defaultValue = "hot") String type,
-                                    @RequestParam(defaultValue = "1") int enable) {
+                                    @RequestParam(defaultValue = "1") int enable,
+                                     @RequestParam(defaultValue = "0") int categoryId) {
 
-        return picService.getPicList(currentPage, pageSize, type, enable);
+        return picService.getPicList(currentPage, pageSize, type, enable, categoryId);
     }
 
     @GetMapping("picSetList")
@@ -38,6 +40,12 @@ public class PicController {
 
         return picService.getPicSetList(currentPage, pageSize, type, enable);
     }
+
+    @PostMapping("addPicList")
+    public ServerResponse addPicList(@RequestBody Map map) {
+        return picService.addPicList(map);
+    }
+
 
     @PostMapping("uploadSinglePic")
     public ServerResponse uploadSinglePic(HttpServletRequest request) {
@@ -53,10 +61,5 @@ public class PicController {
         MultipartFile file = ((MultipartHttpServletRequest) request).getFile("file");
 
         return picService.uploadPicToList(file, params.getParameterMap());
-    }
-
-    @GetMapping()
-    public ServerResponse getInfo(@RequestParam int id) {
-        return new ServerResponse(Const.ResCode.SUCCEES, "ok", id);
     }
 }

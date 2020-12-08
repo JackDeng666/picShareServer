@@ -4,25 +4,36 @@ import edu.gq.bbpic.common.Const;
 import edu.gq.bbpic.common.ServerResponse;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Component
 public class ImageUtil {
 
-    @Value("${fileUploadPath}")
     static String fileUploadPath;
-    @Value("${fileBasicUrl}")
     static String fileBasicUrl;
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
+
+    @Value("${fileUploadPath}")
+    public void setFileUploadPath(String str){
+        fileUploadPath = str;
+    }
+
+    @Value("${fileBasicUrl}")
+    public void setFileBasicUrl(String str){
+        fileBasicUrl = str;
+    }
 
     public static ServerResponse saveImage(MultipartFile file){
         String today = sdf.format(new Date());
 
         String oPath = fileUploadPath + today + "original";
         String tPath = fileUploadPath + today + "thumbnail";
+
         String[] array1 = oPath.split("/");
         String[] array2 = tPath.split("/");
         oPath = "";
@@ -55,8 +66,8 @@ public class ImageUtil {
             // 存储缩略图
             generateThumbnail(originalFile, tPath + thumbnailName);
 
-            map.put("oUrl", fileBasicUrl + today + "original/" + originalName);
-            map.put("tUrl", fileBasicUrl + today + "thumbnail/" + thumbnailName);
+            map.put("oUrl", "images/" + today + "original/" + originalName);
+            map.put("tUrl", "images/"+ today + "thumbnail/" + thumbnailName);
         } catch (IOException e) {
             e.printStackTrace();
             return new ServerResponse(Const.ResCode.FAIL, "上传失败");

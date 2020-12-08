@@ -17,7 +17,13 @@ public interface PictureMapper {
 
     int updateByPrimaryKey(Picture record);
 
-    List selectNew(int currentPage, int pageSize, int enable);
+    List selectNew(int left, int right, int enable);
 
-    List selectHot(int currentPage, int pageSize, int enable);
+    List selectHotByCategory(int left, int right, int enable, int categoryId);
+
+    List selectHot(int left, int right, int enable);
+
+    List selectNewByCategory(int left, int right, int enable, int categoryId);
+
+    List selectByPicListId(Integer picListId);
 }

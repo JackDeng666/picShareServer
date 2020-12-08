@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
         }
         // 防止被刷权限
         user.setRole(2);
+        user.setEnable(1);
         // 加密密码
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
         try {

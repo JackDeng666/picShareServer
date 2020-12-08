@@ -15,9 +15,13 @@ public interface PicListMapper {
 
     PicList selectByNameAndUserId(PicList picList);
 
-    List selectHot(int currentPage, int pageSize, int enable);
+    List selectHot(int left, int right, int enable);
 
-    List selectNew(int currentPage, int pageSize, int enable);
+    List selectHotByCategory(int left, int right, int enable, int categoryId);
+
+    List selectNew(int left, int right, int enable);
+
+    List selectNewByCategory(int left, int right, int enable, int categoryId);
 
     int updateByPrimaryKeySelective(PicList record);
 }

@@ -7,8 +7,6 @@ public class PicList {
 
     private Integer userId;
 
-    private Integer categoryId;
-
     private String picListName;
 
     private String intro;
@@ -21,10 +19,9 @@ public class PicList {
 
     private Date creationTime;
 
-    public PicList(Integer picListId, Integer userId, Integer categoryId, String picListName, String intro, Integer collectNum, Integer heat, Integer enable, Date creationTime) {
+    public PicList(Integer picListId, Integer userId, String picListName, String intro, Integer collectNum, Integer heat, Integer enable, Date creationTime) {
         this.picListId = picListId;
         this.userId = userId;
-        this.categoryId = categoryId;
         this.picListName = picListName;
         this.intro = intro;
         this.collectNum = collectNum;
@@ -51,14 +48,6 @@ public class PicList {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
     }
 
     public String getPicListName() {

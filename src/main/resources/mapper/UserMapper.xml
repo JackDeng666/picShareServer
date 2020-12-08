@@ -32,14 +32,10 @@
   </delete>
 
   <insert id="insert" parameterType="edu.gq.bbpic.pojo.User" >
-    insert into user (user_id, account, password, 
-      email, name, avatar, 
-      role, enable, creation_time
-      )
-    values (#{userId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{role,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, #{creationTime,jdbcType=TIMESTAMP}
-      )
+    insert into user (account, password,
+      email, role, enable, creation_time)
+    values (#{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, now())
   </insert>
 
   <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.User" >
@@ -60,7 +56,7 @@
     select
     <include refid="Base_Column_List"/>
     from user
-    where account = #{account}
+    where (account = #{account} or email = #{account})
     and password = #{password}
   </select>
 

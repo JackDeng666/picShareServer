@@ -7,8 +7,6 @@ public class Picture {
 
     private Integer picListId;
 
-    private Integer categoryId;
-
     private Integer userId;
 
     private String thumbnailUrl;
@@ -25,10 +23,9 @@ public class Picture {
 
     private Integer heat;
 
-    public Picture(Integer pictureId, Integer picListId, Integer categoryId, Integer userId, String thumbnailUrl, String odUrl, Integer praiseNum, Integer collectNum, Integer enable, Date creationTime, Integer heat) {
+    public Picture(Integer pictureId, Integer picListId, Integer userId, String thumbnailUrl, String odUrl, Integer praiseNum, Integer collectNum, Integer enable, Date creationTime, Integer heat) {
         this.pictureId = pictureId;
         this.picListId = picListId;
-        this.categoryId = categoryId;
         this.userId = userId;
         this.thumbnailUrl = thumbnailUrl;
         this.odUrl = odUrl;
@@ -57,14 +54,6 @@ public class Picture {
 
     public void setPicListId(Integer picListId) {
         this.picListId = picListId;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
     }
 
     public Integer getUserId() {

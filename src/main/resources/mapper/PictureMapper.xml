@@ -5,7 +5,6 @@
     <constructor >
       <idArg column="picture_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="pic_list_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="category_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="thumbnail_url" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="od_url" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -17,7 +16,7 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    picture_id, pic_list_id, category_id, user_id, thumbnail_url, od_url, praise_num, 
+    picture_id, pic_list_id, user_id, thumbnail_url, od_url, praise_num,
     collect_num, enable, creation_time, heat
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -31,25 +30,53 @@
     <include refid="Base_Column_List" />
     from picture where enable = #{enable}
     order by creation_time desc
-    limit #{currentPage},#{pageSize}
+    limit #{left},#{right}
+  </select>
+  <select id="selectNewByCategory" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from picture p, tag t
+    where enable = #{enable}
+    and t.category_id = #{categoryId}
+    and t.object_type = 0
+    and t.object_id = p.picture_id
+    order by creation_time desc
+    limit #{left},#{right}
   </select>
   <select id="selectHot" resultMap="BaseResultMap" parameterType="map" >
     select
     <include refid="Base_Column_List" />
     from picture where enable = #{enable}
     order by heat desc
-    limit #{currentPage},#{pageSize}
+    limit #{left},#{right}
+  </select>
+  <select id="selectHotByCategory" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from picture p, tag t
+    where enable = #{enable}
+    and t.category_id = #{categoryId}
+    and t.object_type = 0
+    and t.object_id = p.picture_id
+    order by heat desc
+    limit #{left},#{right}
+  </select>
+  <select id="selectByPicListId" resultMap="BaseResultMap" parameterType="Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from picture
+    where pic_list_id = #{picListId}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from picture
     where picture_id = #{pictureId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="edu.gq.bbpic.pojo.Picture" >
-    insert into picture (pic_list_id, category_id,
+  <insert id="insert" parameterType="edu.gq.bbpic.pojo.Picture" useGeneratedKeys="true" keyProperty="pictureId">
+    insert into picture (pic_list_id,
       user_id, thumbnail_url, od_url, 
       praise_num, collect_num, enable, 
       creation_time, heat)
-    values (#{picListId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER},
+    values (#{picListId,jdbcType=INTEGER},
       #{userId,jdbcType=INTEGER}, #{thumbnailUrl,jdbcType=VARCHAR}, #{odUrl,jdbcType=VARCHAR}, 
       #{praiseNum,jdbcType=INTEGER}, #{collectNum,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, 
       now(), #{heat,jdbcType=INTEGER})
@@ -60,9 +87,6 @@
     <set >
       <if test="picListId != null" >
         pic_list_id = #{picListId,jdbcType=INTEGER},
-      </if>
-      <if test="categoryId != null" >
-        category_id = #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
@@ -94,7 +118,6 @@
   <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.Picture" >
     update picture
     set pic_list_id = #{picListId,jdbcType=INTEGER},
-      category_id = #{categoryId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       od_url = #{odUrl,jdbcType=VARCHAR},
