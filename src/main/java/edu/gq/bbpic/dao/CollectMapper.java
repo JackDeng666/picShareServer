@@ -5,7 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface CollectMapper {
+    Collect select(Collect collect);
+
     int insert(Collect record);
 
-    int insertSelective(Collect record);
+    int update(Collect collect);
 }

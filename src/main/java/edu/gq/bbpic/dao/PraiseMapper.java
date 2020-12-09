@@ -5,7 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface PraiseMapper {
+    Praise select(Praise praise);
+
     int insert(Praise record);
 
-    int insertSelective(Praise record);
+    int update(Praise praise);
 }

@@ -147,9 +147,6 @@
       <if test="enable != null" >
         enable = #{enable,jdbcType=INTEGER},
       </if>
-      <if test="creationTime != null" >
-        creation_time = #{creationTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where pic_list_id = #{picListId,jdbcType=INTEGER}
   </update>
