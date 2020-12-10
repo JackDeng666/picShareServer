@@ -21,7 +21,9 @@ public interface UserMapper {
 
     int selectCount();
 
-//    List selectByPage(int skip, int pageSize);
-//
+    List selectByPage(int left, int right);
+
+    int updateByPrimaryKeySelective(User user);
+
 //    List search(String searchKeyWord);
 }

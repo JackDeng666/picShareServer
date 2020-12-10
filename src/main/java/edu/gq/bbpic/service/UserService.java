@@ -16,7 +16,9 @@ public interface UserService {
 
     ServerResponse checkSuperAdminToken(String token);
 
-//    ServerResponse getUserList(int currentPage, int pageSize);
-//
+    ServerResponse getUserList(int currentPage, int pageSize);
+
+    ServerResponse updateUser(User user);
+
 //    ServerResponse searchUser(String searchKeyWord);
 }

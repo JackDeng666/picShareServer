@@ -38,16 +38,33 @@
       #{email,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, #{enable,jdbcType=INTEGER}, now())
   </insert>
 
+  <update id="updateByPrimaryKeySelective" parameterType="edu.gq.bbpic.pojo.User" >
+    update user
+    <set >
+      <if test="picListId != null" >
+        email = #{email,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        name = #{name,jdbcType=INTEGER},
+      </if>
+      <if test="thumbnailUrl != null" >
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="odUrl != null" >
+        enable = #{enable,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
   <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.User" >
     update user
-    set account = #{account,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
+    set
       email = #{email,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       role = #{role,jdbcType=INTEGER},
-      enable = #{enable,jdbcType=INTEGER},
-      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+      enable = #{enable,jdbcType=INTEGER}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 
@@ -72,5 +89,12 @@
     select
     count(1)
     from user
+  </select>
+
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+    limit #{left}, #{right}
   </select>
 </mapper>

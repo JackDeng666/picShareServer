@@ -7,6 +7,8 @@ import edu.gq.bbpic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("user")
 public class UserController {
@@ -38,22 +40,23 @@ public class UserController {
         return userService.register(user);
     }
 
-//    @GetMapping("getUserList")
-//    public ServerResponse getUserList(int currentPage, int pageSize) {
-//        return userService.getUserList(currentPage, pageSize);
-//    }
+    @GetMapping("getUserList")
+    public ServerResponse getUserList(int currentPage, int pageSize) {
+        return userService.getUserList(currentPage, pageSize);
+    }
 //
 //    @GetMapping("searchUser")
 //    public ServerResponse searchUser(String searchKeyWord) {
 //        return userService.searchUser(searchKeyWord);
 //    }
 
-    /**
-     * 权限操作
-     * 用户修改
-     */
-//    @RequestMapping(value = "updateUser", method = RequestMethod.POST)
-//    public ServerResponse updateUser(User user){
-//        return iUserService.register(user);
-//    }
+    @PostMapping("updateUser")
+    public ServerResponse updateUser(@RequestHeader Map<String, String> headers, @RequestBody User user){
+        String token = headers.get(Const.AUTH);
+        ServerResponse response = userService.checkAdminToken(token);
+        if (response.getStatus() != Const.ResCode.SUCCEES) {
+            return response;
+        }
+        return userService.updateUser(user);
+    }
 }

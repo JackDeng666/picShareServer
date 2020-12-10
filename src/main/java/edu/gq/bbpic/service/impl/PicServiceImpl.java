@@ -212,6 +212,26 @@ public class PicServiceImpl implements PicService {
         }
     }
 
+    @Override
+    public ServerResponse updatePicture(Picture picture) {
+        try{
+            pictureMapper.updateByPrimaryKeySelective(picture);
+            return new ServerResponse(Const.ResCode.SUCCEES, "修改成功");
+        } catch (Exception e) {
+            return new ServerResponse(Const.ResCode.ERROR, e.toString());
+        }
+    }
+
+    @Override
+    public ServerResponse updatePicList(PicList picList) {
+        try{
+            picListMapper.updateByPrimaryKeySelective(picList);
+            return new ServerResponse(Const.ResCode.SUCCEES, "修改成功");
+        } catch (Exception e) {
+            return new ServerResponse(Const.ResCode.ERROR, e.toString());
+        }
+    }
+
     public List<PicListVo> contact(List<PicList> picLists){
         List<PicListVo> picSetList = new LinkedList<>();
 

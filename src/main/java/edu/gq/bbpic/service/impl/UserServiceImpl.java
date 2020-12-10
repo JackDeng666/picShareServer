@@ -151,13 +151,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*@Override
+    @Override
     public ServerResponse getUserList(int currentPage, int pageSize) {
         try {
             int total = userMapper.selectCount();
-            // 分页查询
-            int skip = (currentPage - 1) * pageSize;
-            List list = userMapper.selectByPage(skip, pageSize);
+            List list = userMapper.selectByPage((currentPage - 1) * pageSize, pageSize);
             Map map = new HashMap();
             map.put("userList", list);
             map.put("total", total);
@@ -166,7 +164,18 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return new ServerResponse(Const.ResCode.ERROR, e.toString());
         }
-    }*/
+    }
+
+    @Override
+    public ServerResponse updateUser(User user) {
+        try{
+            userMapper.updateByPrimaryKey(user);
+            return new ServerResponse(Const.ResCode.SUCCEES, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ServerResponse(Const.ResCode.ERROR, e.toString());
+        }
+    }
 
     /*@Override
     public ServerResponse searchUser(String searchKeyWord) {
