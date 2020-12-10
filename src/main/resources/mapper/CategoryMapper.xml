@@ -44,9 +44,6 @@
       <if test="signUrl != null" >
         sign_url = #{signUrl,jdbcType=VARCHAR},
       </if>
-      <if test="creationTime != null" >
-        creation_time = #{creationTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
@@ -54,8 +51,7 @@
   <update id="updateByPrimaryKey" parameterType="edu.gq.bbpic.pojo.Category" >
     update category
     set category_name = #{categoryName,jdbcType=VARCHAR},
-      sign_url = #{signUrl,jdbcType=VARCHAR},
-      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+      sign_url = #{signUrl,jdbcType=VARCHAR}
     where category_id = #{categoryId,jdbcType=INTEGER}
   </update>
 </mapper>

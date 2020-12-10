@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service("staService")
 public class StaServiceImpl implements StaService {
     @Autowired
@@ -119,6 +122,33 @@ public class StaServiceImpl implements StaService {
             return new ServerResponse(Const.ResCode.SUCCEES, collect);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ServerResponse(Const.ResCode.ERROR, e.toString());
+        }
+    }
+
+    @Override
+    public ServerResponse getPraiseAndCollectInfo(int userId, int pictureId) {
+        try{
+            Praise praise = new Praise();
+            praise.setPictureId(pictureId);
+            praise.setUserId(userId);
+            Praise pGet = praiseMapper.select(praise);
+
+            Collect collect = new Collect();
+            collect.setOjectId(pictureId);
+            collect.setObjectType(1);
+            collect.setUserId(userId);
+            Collect cGet = collectMapper.select(collect);
+
+            Picture picture = pictureMapper.selectByPrimaryKey(pictureId);
+
+            Map map = new HashMap();
+            map.put("praiseInfo", pGet);
+            map.put("collectInfo", cGet);
+            map.put("pictureInfo", picture);
+
+            return new ServerResponse(Const.ResCode.SUCCEES, map);
+        } catch (Exception e) {
             return new ServerResponse(Const.ResCode.ERROR, e.toString());
         }
     }

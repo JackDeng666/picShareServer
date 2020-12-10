@@ -61,55 +61,41 @@
     from pic_list
     where pic_list_name = #{picListName} and user_id = #{userId}
   </select>
-  <select id="selectHot" resultMap="PicListVoMap" parameterType="map" >
+  <select id="selectHot" resultMap="BaseResultMap" parameterType="map" >
     select
-    pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar, t.object_id, t.object_type
-    from pic_list pl, `user` u, tag t
-    where pl.user_id = u.user_id
-    and pl.pic_list_id = t.object_id
+    <include refid="Base_Column_List" />
+    from pic_list
+    where enable = #{enable}
+    order by heat desc
+    limit #{left}, #{right}
+  </select>
+  <select id="selectHotByCategory" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from pic_list pl, tag t
+    where t.object_id = pl.pic_list_id
     and t.object_type = 1
+    and t.category_id = #{categoryId}
     and pl.enable = #{enable}
     order by pl.heat desc
     limit #{left}, #{right}
   </select>
-  <select id="selectHotByCategory" resultMap="PicListVoMap" parameterType="map" >
+  <select id="selectNew" resultMap="BaseResultMap" parameterType="map" >
     select
-    pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar, t.object_id, t.object_type
-    from pic_list pl, `user` u, tag t
-    where pl.user_id = u.user_id
-    and pl.pic_list_id = t.object_id
-    and t.object_type = 1
-    and pl.enable = #{enable}
-    and t.category_id = #{categoryId}
-    and t.object_id = pl.pic_list_id
-    order by pl.heat desc
+    <include refid="Base_Column_List" />
+    from pic_list
+    where enable = #{enable}
+    order by creation_time desc
     limit #{left}, #{right}
   </select>
-  <select id="selectNew" resultMap="PicListVoMap" parameterType="map" >
+  <select id="selectNewByCategory" resultMap="BaseResultMap" parameterType="map" >
     select
-    pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar, t.object_id, t.object_type
-    from pic_list pl, `user` u, tag t
-    where pl.user_id = u.user_id
-    and pl.pic_list_id = t.object_id
+    <include refid="Base_Column_List" />
+    from pic_list pl, tag t
+    where t.object_id = pl.pic_list_id
     and t.object_type = 1
-    and pl.enable = #{enable}
-    order by pl.creation_time desc
-    limit #{left}, #{right}
-  </select>
-  <select id="selectNewByCategory" resultMap="PicListVoMap" parameterType="map" >
-    select
-    pl.pic_list_id, pl.pic_list_name, pl.intro, pl.collect_num, pl.heat, pl.creation_time pl_time,
-    u.user_id, u.name, u.avatar, t.object_id, t.object_type
-    from pic_list pl, `user` u, tag t
-    where pl.user_id = u.user_id
-    and pl.pic_list_id = t.object_id
-    and t.object_type = 1
-    and pl.enable = #{enable}
     and t.category_id = #{categoryId}
-    and t.object_id = pl.pic_list_id
+    and pl.enable = #{enable}
     order by pl.creation_time desc
     limit #{left}, #{right}
   </select>

@@ -8,11 +8,13 @@ import edu.gq.bbpic.common.ServerResponse;
 import edu.gq.bbpic.dao.PicListMapper;
 import edu.gq.bbpic.dao.PictureMapper;
 import edu.gq.bbpic.dao.TagMapper;
+import edu.gq.bbpic.dao.UserMapper;
 import edu.gq.bbpic.pojo.PicList;
 import edu.gq.bbpic.pojo.Picture;
 import edu.gq.bbpic.pojo.Tag;
 import edu.gq.bbpic.service.PicService;
 import edu.gq.bbpic.util.ImageUtil;
+import edu.gq.bbpic.vo.PicListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ public class PicServiceImpl implements PicService {
     private PictureMapper pictureMapper;
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     @Transactional
@@ -165,17 +169,17 @@ public class PicServiceImpl implements PicService {
             if("new".equals(type)){
                 // 不通过分类
                 if(categoryId == 0){
-                    picList = pictureMapper.selectNew(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                    picList = pictureMapper.selectNew((currentPage-1) * pageSize, pageSize, enable);
                 } else {
-                    picList = pictureMapper.selectNewByCategory(currentPage*pageSize-pageSize, currentPage*pageSize, enable, categoryId);
+                    picList = pictureMapper.selectNewByCategory((currentPage-1) * pageSize, pageSize, enable, categoryId);
                 }
             }
             if("hot".equals(type)){
                 // 不通过分类
                 if(categoryId == 0){
-                    picList = pictureMapper.selectHot(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                    picList = pictureMapper.selectHot((currentPage-1) * pageSize, pageSize, enable);
                 } else {
-                    picList = pictureMapper.selectHotByCategory(currentPage*pageSize-pageSize, currentPage*pageSize, enable, categoryId);
+                    picList = pictureMapper.selectHotByCategory((currentPage-1) * pageSize, pageSize, enable, categoryId);
                 }
             }
             return new ServerResponse(Const.ResCode.SUCCEES, "ok", picList);
@@ -187,24 +191,46 @@ public class PicServiceImpl implements PicService {
     @Override
     public ServerResponse getPicSetList(int currentPage, int pageSize, String type, int enable, int categoryId) {
         try{
-            List picSetList = null;
+            List<PicListVo> picSetList = null;
             if("new".equals(type)){
                 if(categoryId == 0){
-                    picSetList = picListMapper.selectNew(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                    picSetList = contact(picListMapper.selectNew((currentPage-1) * pageSize, pageSize, enable));
                 } else {
-                    picSetList = picListMapper.selectNewByCategory(currentPage*pageSize-pageSize, currentPage*pageSize, enable, categoryId);
+                    picSetList = contact(picListMapper.selectNewByCategory((currentPage-1) * pageSize, pageSize, enable, categoryId));
                 }
             }
             if("hot".equals(type)){
                 if(categoryId == 0){
-                    picSetList = picListMapper.selectHot(currentPage*pageSize-pageSize, currentPage*pageSize, enable);
+                    picSetList = contact(picListMapper.selectHot((currentPage-1) * pageSize, pageSize, enable));
                 } else {
-                    picSetList = picListMapper.selectHotByCategory(currentPage*pageSize-pageSize, currentPage*pageSize, enable, categoryId);
+                    picSetList = contact(picListMapper.selectHotByCategory((currentPage-1) * pageSize, pageSize, enable, categoryId));
                 }
             }
             return new ServerResponse(Const.ResCode.SUCCEES, "ok", picSetList);
         } catch (Exception e) {
             return new ServerResponse(Const.ResCode.ERROR, e.toString());
         }
+    }
+
+    public List<PicListVo> contact(List<PicList> picLists){
+        List<PicListVo> picSetList = new LinkedList<>();
+
+        for (PicList picList: picLists) {
+            PicListVo picListVo = new PicListVo();
+
+            picListVo.setCollectNum(picList.getCollectNum());
+            picListVo.setCreationTime(picList.getCreationTime());
+            picListVo.setHeat(picList.getHeat());
+            picListVo.setIntro(picList.getIntro());
+            picListVo.setPicListId(picList.getPicListId());
+            picListVo.setPicListName(picList.getPicListName());
+
+            picListVo.setPictures(pictureMapper.selectByPicListId(picList.getPicListId()));
+            picListVo.setTags(tagMapper.select(picList.getPicListId(), 1));
+            picListVo.setUser(userMapper.selectByPrimaryKey(picList.getUserId()));
+
+            picSetList.add(picListVo);
+        }
+        return picSetList;
     }
 }
