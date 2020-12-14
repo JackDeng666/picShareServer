@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return new ServerResponse(Const.ResCode.FAIL, "登陆失败，用户不存在或密码错误");
         }
-        if (user.getRole() != 0) {
+        if (user.getRole() != 0 && user.getRole() != 1) {
             return new ServerResponse(Const.ResCode.FAIL, "登陆失败，非超级管理员");
         }
         user.setPassword(null);
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
                 return new ServerResponse(Const.ResCode.FAIL, "token无效");
             } else {
                 String role = map.get("role");
-                if (role.equals("1")) {
+                if (Integer.valueOf(role) <= 1) {
                     return new ServerResponse(Const.ResCode.SUCCEES, "是管理员", map);
                 }
                 return new ServerResponse(Const.ResCode.NEED_ROLE, "非管理员");

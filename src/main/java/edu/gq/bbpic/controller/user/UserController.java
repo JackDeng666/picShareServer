@@ -41,7 +41,12 @@ public class UserController {
     }
 
     @GetMapping("getUserList")
-    public ServerResponse getUserList(int currentPage, int pageSize) {
+    public ServerResponse getUserList(@RequestHeader Map<String, String> headers, int currentPage, int pageSize) {
+        String token = headers.get(Const.AUTH);
+        ServerResponse response = userService.checkAdminToken(token);
+        if (response.getStatus() != Const.ResCode.SUCCEES) {
+            return response;
+        }
         return userService.getUserList(currentPage, pageSize);
     }
 //

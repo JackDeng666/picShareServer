@@ -29,8 +29,10 @@ public class ScheduledTaskService {
         List<Category> categories = categoryMapper.selectAll();
         for (Category cate: categories) {
             List<Picture> pictures = pictureMapper.selectHotByCategory(0,1, 0, cate.getCategoryId());
-            cate.setSignUrl(pictures.get(0).getThumbnailUrl());
-            categoryMapper.updateByPrimaryKeySelective(cate);
+            if(pictures.size() > 0){
+                cate.setSignUrl(pictures.get(0).getThumbnailUrl());
+                categoryMapper.updateByPrimaryKeySelective(cate);
+            }
         }
     }
 }

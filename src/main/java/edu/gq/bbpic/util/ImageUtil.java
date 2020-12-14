@@ -31,8 +31,8 @@ public class ImageUtil {
     public static ServerResponse saveImage(MultipartFile file){
         String today = sdf.format(new Date());
 
-        String oPath = fileUploadPath + today + "original";
-        String tPath = fileUploadPath + today + "thumbnail";
+        String oPath = fileUploadPath + today + "original/";
+        String tPath = fileUploadPath + today + "thumbnail/";
 
         String[] array1 = oPath.split("/");
         String[] array2 = tPath.split("/");
