@@ -24,8 +24,7 @@ public class UserServiceImpl implements UserService {
 
     // 普通用户登陆
     @Override
-    public ServerResponse<User> login(String account, String password) {
-        // 密码登陆MD5
+    public ServerResponse login(String account, String password) {
         String mdPsw = MD5Util.MD5EncodeUtf8(password);
         User user = userMapper.checkLogin(account, mdPsw);
         if (user == null) {
@@ -37,9 +36,8 @@ public class UserServiceImpl implements UserService {
         claims.put("account", user.getAccount());
         claims.put("role", "2");
         claims.put("id", user.getUserId().toString());
-        // 7天过期
         String token = JwtHelper.genToken(claims, new Date(new Date().getTime() + 7 * 24 * 3600 * 1000));
-        // 返回结果
+
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("userInfo", user);
         resMap.put("token", token);
@@ -48,8 +46,7 @@ public class UserServiceImpl implements UserService {
 
     // 超级管理员登陆
     @Override
-    public ServerResponse<User> adminLogin(String account, String password) {
-        // 密码登陆MD5
+    public ServerResponse adminLogin(String account, String password) {
         String mdPsw = MD5Util.MD5EncodeUtf8(password);
         User user = userMapper.checkLogin(account, mdPsw);
         if (user == null) {
@@ -64,25 +61,23 @@ public class UserServiceImpl implements UserService {
         claims.put("account", user.getAccount());
         claims.put("role", user.getRole().toString());
         claims.put("id", user.getUserId().toString());
-        // 1天过期
         String token = JwtHelper.genToken(claims, new Date(new Date().getTime() + 1 * 24 * 3600 * 1000));
-        // 返回结果
+
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("userInfo", user);
         resMap.put("token", token);
         return new ServerResponse(Const.ResCode.SUCCEES, "登陆成功", resMap);
     }
 
+    // 注册
     @Override
     public ServerResponse register(User user) {
         int count = userMapper.selectByAccount(user.getAccount());
         if (count != 0) {
             return new ServerResponse(Const.ResCode.FAIL, "注册失败，账号存在");
         }
-        // 防止被刷权限
         user.setRole(2);
         user.setEnable(1);
-        // 加密密码
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
         try {
             userMapper.insert(user);
@@ -168,8 +163,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse updateUser(User user) {
+        return null;
+    }
+
+    @Override
+    public ServerResponse updateEnable(User user) {
         try{
-            userMapper.updateByPrimaryKey(user);
+            userMapper.updateEnable(user);
             return new ServerResponse(Const.ResCode.SUCCEES, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();

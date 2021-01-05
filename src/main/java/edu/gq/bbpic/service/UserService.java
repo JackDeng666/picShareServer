@@ -4,9 +4,9 @@ import edu.gq.bbpic.common.ServerResponse;
 import edu.gq.bbpic.pojo.User;
 
 public interface UserService {
-    ServerResponse<User> login(String account, String password);
+    ServerResponse login(String account, String password);
 
-    ServerResponse<User> adminLogin(String account, String password);
+    ServerResponse adminLogin(String account, String password);
 
     ServerResponse<String> register(User user);
 
@@ -19,6 +19,8 @@ public interface UserService {
     ServerResponse getUserList(int currentPage, int pageSize);
 
     ServerResponse updateUser(User user);
+
+    ServerResponse updateEnable(User user);
 
 //    ServerResponse searchUser(String searchKeyWord);
 }

@@ -22,25 +22,4 @@ public class CategoryController {
     public ServerResponse getCategory() {
         return categoryService.getAllCategory();
     }
-
-    // 管理员接口
-    @PostMapping("addCategory")
-    public ServerResponse addCategory(@RequestHeader Map<String, String> headers, @RequestBody Category category) {
-        String token = headers.get(Const.AUTH);
-        ServerResponse response = userService.checkAdminToken(token);
-        if (response.getStatus() != Const.ResCode.SUCCEES) {
-            return response;
-        }
-        return categoryService.addCategory();
-    }
-
-    @PostMapping("updateCategory")
-    public ServerResponse updateCategory(@RequestHeader Map<String, String> headers, @RequestBody Category category) {
-        String token = headers.get(Const.AUTH);
-        ServerResponse response = userService.checkAdminToken(token);
-        if (response.getStatus() != Const.ResCode.SUCCEES) {
-            return response;
-        }
-        return categoryService.updateCategory();
-    }
 }

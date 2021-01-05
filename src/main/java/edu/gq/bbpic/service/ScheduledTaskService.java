@@ -28,7 +28,7 @@ public class ScheduledTaskService {
     private void configureTasks() {
         List<Category> categories = categoryMapper.selectAll();
         for (Category cate: categories) {
-            List<Picture> pictures = pictureMapper.selectHotByCategory(0,1, 0, cate.getCategoryId());
+            List<Picture> pictures = pictureMapper.selectHotByCategory(0,1, 1, cate.getCategoryId());
             if(pictures.size() > 0){
                 cate.setSignUrl(pictures.get(0).getThumbnailUrl());
                 categoryMapper.updateByPrimaryKeySelective(cate);

@@ -66,25 +66,4 @@ public class PicController {
 
         return picService.uploadPicToList(file, params.getParameterMap());
     }
-
-    // 管理员接口
-    @PostMapping("updatePicture")
-    public ServerResponse updatePicture(@RequestHeader Map<String, String> headers, @RequestBody Picture picture) {
-        String token = headers.get(Const.AUTH);
-        ServerResponse response = userService.checkAdminToken(token);
-        if (response.getStatus() != Const.ResCode.SUCCEES) {
-            return response;
-        }
-        return picService.updatePicture(picture);
-    }
-
-    @PostMapping("updatePicList")
-    public ServerResponse updatePicList(@RequestHeader Map<String, String> headers, @RequestBody PicList picList) {
-        String token = headers.get(Const.AUTH);
-        ServerResponse response = userService.checkAdminToken(token);
-        if (response.getStatus() != Const.ResCode.SUCCEES) {
-            return response;
-        }
-        return picService.updatePicList(picList);
-    }
 }

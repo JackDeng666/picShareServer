@@ -39,29 +39,4 @@ public class UserController {
     public ServerResponse register(@RequestBody User user) {
         return userService.register(user);
     }
-
-    @GetMapping("getUserList")
-    public ServerResponse getUserList(@RequestHeader Map<String, String> headers, int currentPage, int pageSize) {
-        String token = headers.get(Const.AUTH);
-        ServerResponse response = userService.checkAdminToken(token);
-        if (response.getStatus() != Const.ResCode.SUCCEES) {
-            return response;
-        }
-        return userService.getUserList(currentPage, pageSize);
-    }
-//
-//    @GetMapping("searchUser")
-//    public ServerResponse searchUser(String searchKeyWord) {
-//        return userService.searchUser(searchKeyWord);
-//    }
-
-    @PostMapping("updateUser")
-    public ServerResponse updateUser(@RequestHeader Map<String, String> headers, @RequestBody User user){
-        String token = headers.get(Const.AUTH);
-        ServerResponse response = userService.checkAdminToken(token);
-        if (response.getStatus() != Const.ResCode.SUCCEES) {
-            return response;
-        }
-        return userService.updateUser(user);
-    }
 }

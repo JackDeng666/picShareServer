@@ -43,31 +43,35 @@ public class StaServiceImpl implements StaService {
                 praiseMapper.insert(praise);
                 picture.setHeat(picture.getHeat() + 1);
                 picture.setPraiseNum(picture.getPraiseNum() + 1);
-
-                picList.setHeat(picList.getHeat() + 1);
             } else {
                 if(praiseGet.getIsCancel() == 0){
                     praise.setIsCancel(1);
                     picture.setHeat(picture.getHeat() - 1);
                     picture.setPraiseNum(picture.getPraiseNum() - 1);
-
-                    picList.setHeat(picList.getHeat() - 1);
                 }
                 if(praiseGet.getIsCancel() == 1){
                     praise.setIsCancel(0);
                     picture.setHeat(picture.getHeat() + 1);
                     picture.setPraiseNum(picture.getPraiseNum() + 1);
-
-                    picList.setHeat(picList.getHeat() + 1);
                 }
                 praiseMapper.update(praise);
             }
+            if(picList != null){
+                if(praise.getIsCancel() == 0){
+                    picList.setHeat(picList.getHeat() + 1);
+                }
+                if(praise.getIsCancel() == 1){
+                    picList.setHeat(picList.getHeat() - 1);
+                }
+                picListMapper.updateByPrimaryKeySelective(picList);
+            }
+
             pictureMapper.updateByPrimaryKeySelective(picture);
-            picListMapper.updateByPrimaryKeySelective(picList);
 
             return new ServerResponse(Const.ResCode.SUCCEES, praise);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
             return new ServerResponse(Const.ResCode.ERROR, e.toString());
         }
     }

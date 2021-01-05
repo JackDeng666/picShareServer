@@ -68,6 +68,13 @@
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 
+  <update id="updateEnable" parameterType="edu.gq.bbpic.pojo.User" >
+    update user
+    set
+      enable = #{enable,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
   <!--  登陆-->
   <select id="checkLogin" resultMap="BaseResultMap" parameterType="map">
     select

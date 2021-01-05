@@ -19,6 +19,8 @@ public class PicListVo {
 
     private Integer heat;
 
+    private Integer enable;
+
     private Date creationTime;
 
     private User user;
@@ -29,6 +31,14 @@ public class PicListVo {
 
     public PicListVo(){
 
+    }
+
+    public Integer getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Integer enable) {
+        this.enable = enable;
     }
 
     public List<TagVo> getTags() {

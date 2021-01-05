@@ -242,6 +242,7 @@ public class PicServiceImpl implements PicService {
             picListVo.setCreationTime(picList.getCreationTime());
             picListVo.setHeat(picList.getHeat());
             picListVo.setIntro(picList.getIntro());
+            picListVo.setEnable(picList.getEnable());
             picListVo.setPicListId(picList.getPicListId());
             picListVo.setPicListName(picList.getPicListName());
 
